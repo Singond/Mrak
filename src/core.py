@@ -22,6 +22,23 @@ class Mrak:
             v.set_config_file(configfile)
         v.read_in_config()
 
+        self.remotes = []
+        for remoteconfig in v.get("remotes"):
+            self.remotes.append(Remote(remoteconfig))
+
     def display_config(self):
-        for remote in v.get("remotes"):
-            print("{name} -> {dir}".format(**remote))
+        print("Configured remotes:")
+        for remote in self.remotes:
+            print(remote)
+
+class Remote:
+    '''
+    Configuration for an rclone remote.
+    '''
+
+    def __init__(self, config):
+        self.name = config["name"]
+        self.localdir = config["dir"]
+
+    def __str__(self):
+        return f"{self.name} -> {self.localdir}"
