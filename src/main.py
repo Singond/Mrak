@@ -1,4 +1,5 @@
 from core import Mrak
+import systray
 
 m = Mrak("../test/testconfig.yaml")
-m.display_config()
+systray.run(m)
