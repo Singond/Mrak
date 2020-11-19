@@ -1,2 +1,5 @@
-one: 1
-two: 2
+remotes:
+  - name: drive
+    dir: $HOME/Drive
+  - name: dropbox
+    dir: $HOME/Dropbox

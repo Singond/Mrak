@@ -22,7 +22,6 @@ class Mrak:
             v.set_config_file(configfile)
         v.read_in_config()
 
-    def foo(self):
-        print(v.get("one"))
-        print(v.get("two"))
-        print(v.get("three"))
+    def display_config(self):
+        for remote in v.get("remotes"):
+            print("{name} -> {dir}".format(**remote))
