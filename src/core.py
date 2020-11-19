@@ -38,6 +38,7 @@ class Remote:
 
     def __init__(self, config):
         self.name = config["name"]
+        self.label = config["label"]
         self.localdir = config["dir"]
 
     def __str__(self):

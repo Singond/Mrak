@@ -1,5 +1,7 @@
 remotes:
   - name: drive
+    label: My Google Drive
     dir: $HOME/Drive
   - name: dropbox
+    label: My Dropbox
     dir: $HOME/Dropbox
