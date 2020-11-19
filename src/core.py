@@ -38,7 +38,10 @@ class Remote:
 
     def __init__(self, config):
         self.name = config["name"]
-        self.label = config["label"]
+        if "label" in config:
+            self.label = config["label"]
+        else:
+            self.label = self.name
         self.localdir = config["dir"]
 
     def __str__(self):
