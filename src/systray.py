@@ -8,6 +8,7 @@ gi.require_version('Notify', '0.7')
 gi.require_version('AppIndicator3', '0.1')
 from gi.repository import Gtk, Notify, AppIndicator3 as AppIndicator
 
+
 def menu(mrak):
     """
     Create the menu for the system tray icon.
@@ -29,6 +30,7 @@ def menu(mrak):
     return menu
 
 def submenu(remote):
+
     submenu = Gtk.Menu()
 
     def show_name(_):
@@ -45,11 +47,13 @@ def submenu(remote):
 
     return submenu
 
+
 def close(_):
     """
     Remove Mrak system tray indicator.
     """
     Gtk.main_quit()
+
 
 def run(app):
     """

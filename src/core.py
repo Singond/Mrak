@@ -1,6 +1,7 @@
 from log import logger
 from vyper import v
 
+
 class Mrak:
     """
     An instance of the Mrak application.
@@ -34,6 +35,7 @@ class Mrak:
         print("Configured remotes:")
         for remote in self.remotes:
             print(remote)
+
 
 class Remote:
     """
