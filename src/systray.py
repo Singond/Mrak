@@ -39,9 +39,9 @@ def submenu(remote):
 
     def show_dir(_):
         Notify.Notification.new(remote.label, remote.localdir).show()
-    show_name_item = Gtk.MenuItem(label="Show local sync dir")
-    show_name_item.connect("activate", show_dir)
-    submenu.append(show_name_item)
+    show_dir_item = Gtk.MenuItem(label="Show local sync dir")
+    show_dir_item.connect("activate", show_dir)
+    submenu.append(show_dir_item)
 
     return submenu
 
