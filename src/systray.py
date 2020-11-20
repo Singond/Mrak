@@ -1,6 +1,6 @@
-'''
+"""
 A system tray interface for Mrak.
-'''
+"""
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -9,9 +9,9 @@ gi.require_version('AppIndicator3', '0.1')
 from gi.repository import Gtk, Notify, AppIndicator3 as AppIndicator
 
 def menu(mrak):
-    '''
+    """
     Create the menu for the system tray icon.
-    '''
+    """
 
     menu = Gtk.Menu()
     Notify.init("Mrak")
@@ -46,15 +46,15 @@ def submenu(remote):
     return submenu
 
 def close(_):
-    '''
+    """
     Remove Mrak system tray indicator.
-    '''
+    """
     Gtk.main_quit()
 
 def run(app):
-    '''
+    """
     Create and show Mrak system tray.
-    '''
+    """
     indicator = AppIndicator.Indicator.new("mrak",
             "weather-overcast-symbolic",
             AppIndicator.IndicatorCategory.APPLICATION_STATUS)

@@ -2,16 +2,16 @@ from log import logger
 from vyper import v
 
 class Mrak:
-    '''
+    """
     An instance of the Mrak application.
-    '''
+    """
 
     def __init__(self, configfile=None):
-        '''
+        """
         Create a new instance with the given configuration file.
         If the configuration file is omitted, search for a file called
         ~/.config/mrak/config.*`.
-        '''
+        """
         if configfile is None:
             v.set_config_name("config")
             v.add_config_path("$HOME/.config/mrak")
@@ -36,9 +36,9 @@ class Mrak:
             print(remote)
 
 class Remote:
-    '''
+    """
     Configuration for an rclone remote.
-    '''
+    """
 
     def __init__(self, config):
         self.name = config["name"]
