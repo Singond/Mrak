@@ -18,7 +18,7 @@ def menu(mrak):
 
     for remote in mrak.remotes:
         item = Gtk.MenuItem(label=remote.label)
-        item.connect("activate", make_display_cmd(remote))
+        item.set_submenu(submenu(remote))
         menu.append(item)
 
     quitcmd = Gtk.MenuItem(label="Quit Mrak")
@@ -28,11 +28,22 @@ def menu(mrak):
     menu.show_all()
     return menu
 
-def make_display_cmd(remote):
-    def display(_):
-            text = f"Remote {remote.name} syncs to {remote.localdir}."
-            Notify.Notification.new("Remote", text).show()
-    return display
+def submenu(remote):
+    submenu = Gtk.Menu()
+
+    def show_name(_):
+        Notify.Notification.new(remote.label, remote.name).show()
+    show_name_item = Gtk.MenuItem(label="Show name")
+    show_name_item.connect("activate", show_name)
+    submenu.append(show_name_item)
+
+    def show_dir(_):
+        Notify.Notification.new(remote.label, remote.localdir).show()
+    show_name_item = Gtk.MenuItem(label="Show local sync dir")
+    show_name_item.connect("activate", show_dir)
+    submenu.append(show_name_item)
+
+    return submenu
 
 def close(_):
     '''
