@@ -12,7 +12,6 @@ class Mrak:
         If the configuration file is omitted, search for a file called
         ~/.config/mrak/config.*`.
         '''
-
         if configfile is None:
             v.set_config_name("config")
             v.add_config_path("$HOME/.config/mrak")
@@ -21,6 +20,10 @@ class Mrak:
         logger.debug("Reading configuration from %s", v.config_file_used())
         v.read_in_config()
 
+        self.configure(v)
+
+    def configure(self, v):
+        """Configure Mrak from the given vyper configuration object."""
         self.remotes = []
         for remoteconfig in v.get("remotes"):
             remote = Remote(remoteconfig)
