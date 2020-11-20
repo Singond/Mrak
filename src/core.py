@@ -1,3 +1,4 @@
+import os
 from log import logger
 from vyper import v
 
@@ -20,6 +21,7 @@ class Mrak:
             v.set_config_file(configfile)
         logger.debug("Reading configuration from %s", v.config_file_used())
         v.read_in_config()
+        v.set_default("rclone_executable", "rclone")
 
         self.configure(v)
 
@@ -35,6 +37,18 @@ class Mrak:
         print("Configured remotes:")
         for remote in self.remotes:
             print(remote)
+
+    def _rclone(self, args):
+        rclone = v.get("rclone_executable")
+        cmd = f"{rclone} {args}"
+        logger.debug("Running command: %s", cmd)
+        os.system(cmd)
+
+    def update_local(self, remote):
+        """
+        Update the local directory with files from the remote.
+        """
+        self._rclone(f"--dry-run copy --update {remote.name}: {remote.localdir}")
 
 
 class Remote:
