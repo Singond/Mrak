@@ -1,8 +1,6 @@
+from log import logger
 from vyper import v
 
-'''
-
-'''
 class Mrak:
     '''
     An instance of the Mrak application.
@@ -20,11 +18,14 @@ class Mrak:
             v.add_config_path("$HOME/.config/mrak")
         else:
             v.set_config_file(configfile)
+        logger.debug("Reading configuration from %s", v.config_file_used())
         v.read_in_config()
 
         self.remotes = []
         for remoteconfig in v.get("remotes"):
-            self.remotes.append(Remote(remoteconfig))
+            remote = Remote(remoteconfig)
+            self.remotes.append(remote)
+            logger.debug("Configured remote %s", remote)
 
     def display_config(self):
         print("Configured remotes:")
