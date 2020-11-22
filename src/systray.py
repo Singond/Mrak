@@ -22,6 +22,7 @@ def menu(mrak):
         item.set_submenu(submenu(mrak, remote))
         menu.append(item)
 
+    menu.append(Gtk.SeparatorMenuItem())
     quitcmd = Gtk.MenuItem(label="Quit Mrak")
     quitcmd.connect("activate", close)
     menu.append(quitcmd)
