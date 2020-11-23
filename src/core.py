@@ -48,7 +48,9 @@ class Mrak:
         """
         Update the local directory with files from the remote.
         """
-        self._rclone(f"--dry-run copy --update {remote.name}: {remote.localdir}")
+        self._rclone((
+            f"--dry-run copy --update "
+            f"{remote.full_remotepath()} {remote.localpath}"))
 
 
 class Remote:
@@ -57,12 +59,18 @@ class Remote:
     """
 
     def __init__(self, config):
-        self.name = config["name"]
+        self.remotepath = config["remotepath"]
+        self.localpath = config["localpath"]
         if "label" in config:
             self.label = config["label"]
         else:
             self.label = self.name
-        self.localdir = config["dir"]
+
+    def full_remotepath(self):
+        if ":" in self.remotepath:
+            return self.remotepath
+        else:
+            return self.remotepath + ":"
 
     def __str__(self):
-        return f"{self.name} -> {self.localdir}"
+        return f"{self.remotepath} -> {self.localpath}"

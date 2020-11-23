@@ -1,7 +1,7 @@
 remotes:
-  - name: drive
+  - remotepath: drive
+    localpath: $HOME/Drive
     label: My Google Drive
-    dir: $HOME/Drive
-  - name: dropbox
+  - remotepath: dropbox
+    localpath: $HOME/Dropbox
     label: My Dropbox
-    dir: $HOME/Dropbox
