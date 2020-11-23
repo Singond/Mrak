@@ -1,5 +1,7 @@
 import os
+import sys
 from log import logger
+from tendo import singleton
 from vyper import v
 
 
@@ -14,6 +16,14 @@ class Mrak:
         If the configuration file is omitted, search for a file called
         ~/.config/mrak/config.*`.
         """
+
+        # Check that the script is not running already
+        try:
+            self.lock = singleton.SingleInstance()
+        except singleton.SingleInstanceException:
+            print("Mrak is already running", file=sys.stderr)
+            sys.exit(3)
+
         if configfile is None:
             v.set_config_name("config")
             v.add_config_path("$HOME/.config/mrak")
