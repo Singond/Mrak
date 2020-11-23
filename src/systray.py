@@ -34,18 +34,6 @@ def menu(mrak):
 def submenu(mrak, remote):
     submenu = Gtk.Menu()
 
-    def show_name(_):
-        Notify.Notification.new(remote.label, remote.name).show()
-    show_name_item = Gtk.MenuItem(label="Show name")
-    show_name_item.connect("activate", show_name)
-    submenu.append(show_name_item)
-
-    def show_dir(_):
-        Notify.Notification.new(remote.label, remote.localdir).show()
-    show_dir_item = Gtk.MenuItem(label="Show local sync dir")
-    show_dir_item.connect("activate", show_dir)
-    submenu.append(show_dir_item)
-
     item = Gtk.MenuItem(label="Update local directory")
     item.connect("activate", lambda _: mrak.update_local(remote))
     submenu.append(item)
