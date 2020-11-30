@@ -1,8 +1,8 @@
 import os
 import sys
-from log import logger
 from tendo import singleton
 from vyper import v
+from mrak.log import logger
 
 
 class Mrak:
