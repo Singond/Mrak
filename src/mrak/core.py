@@ -1,7 +1,7 @@
 import os
 import sys
 from tendo import singleton
-from vyper import v
+import vyper; v = vyper.v
 from mrak.log import logger
 
 
@@ -29,10 +29,15 @@ class Mrak:
             v.add_config_path("$HOME/.config/mrak")
         else:
             v.set_config_file(configfile)
-        logger.debug("Reading configuration from %s", v.config_file_used())
-        v.read_in_config()
-        v.set_default("rclone_executable", "rclone")
 
+        try:
+            v.read_in_config()
+            logger.debug("Read configuration from file '%s'", v.config_file_used())
+        except vyper.errors.UnsupportedConfigError:
+            if not v.config_file_used():
+                raise ConfigNotFoundException from None
+
+        v.set_default("rclone_executable", "rclone")
         self.configure(v)
 
     def configure(self, v):
@@ -84,3 +89,7 @@ class Remote:
 
     def __str__(self):
         return f"{self.remotepath} -> {self.localpath}"
+
+
+class ConfigNotFoundException(Exception):
+    pass
