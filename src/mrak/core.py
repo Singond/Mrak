@@ -1,5 +1,6 @@
-import os
+import subprocess
 import sys
+from threading import Thread;
 from tendo import singleton
 import vyper; v = vyper.v
 from mrak.log import logger
@@ -40,6 +41,8 @@ class Mrak:
         v.set_default("rclone_executable", "rclone")
         self.configure(v)
 
+        self.rclonethread = None
+
     def configure(self, v):
         """Configure Mrak from the given vyper configuration object."""
         self.remotes = []
@@ -53,19 +56,29 @@ class Mrak:
         for remote in self.remotes:
             print(remote)
 
-    def _rclone(self, args):
-        rclone = v.get("rclone_executable")
-        cmd = f"{rclone} {args}"
-        logger.debug("Running command: %s", cmd)
-        os.system(cmd)
+    def _rclone(self, args, callback=None):
+        """
+        Run rclone with the giver arguments in a dedicated thread.
+        Return the thread object.
+        """
+        thr = RcloneThread(args, callback)
+        thr.start()
+        return thr
 
-    def update_local(self, remote):
+    def update_local(self, remote, callback=None):
         """
         Update the local directory with files from the remote.
         """
-        self._rclone((
-            f"--dry-run copy --update "
-            f"{remote.full_remotepath()} {remote.localpath}"))
+        self.rclonethread = self._rclone(
+            ["--dry-run", "copy", "--update",
+             remote.full_remotepath(), remote.localpath],
+            callback)
+
+    def stop_rclone(self):
+        if self.rclonethread and self.rclonethread.is_alive():
+            self.rclonethread.stop()
+        else:
+            logger.warning("No living rclone process to terminate.")
 
 
 class Remote:
@@ -90,6 +103,29 @@ class Remote:
     def __str__(self):
         return f"{self.remotepath} -> {self.localpath}"
 
+
+class RcloneThread(Thread):
+    """A thread with rclone process."""
+
+    def __init__(self, rclone_args, callback, **kwargs):
+        super().__init__(**kwargs)
+        self.args = rclone_args
+        self.callback = callback
+        rclonecmd = v.get("rclone_executable")
+        logger.debug("Running %s with arguments: %s", rclonecmd, rclone_args)
+        self.proc = subprocess.Popen([rclonecmd, *rclone_args])
+
+    def run(self):
+        logger.info("Running rclone...")
+        exitcode = self.proc.wait()
+        logger.info("Rclone exited with code %d.", exitcode)
+        self.callback()
+
+    def stop(self):
+        """Terminates the rclone process."""
+        logger.info("Stopping rclone...")
+        self.proc.terminate()
+        logger.debug("Sent SIGTERM to rclone.")
 
 class ConfigNotFoundException(Exception):
     pass

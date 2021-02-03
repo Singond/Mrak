@@ -6,7 +6,8 @@ import gi
 gi.require_version("Gtk", "3.0")
 gi.require_version('Notify', '0.7')
 gi.require_version('AppIndicator3', '0.1')
-from gi.repository import Gtk, Notify, AppIndicator3 as AppIndicator
+from gi.repository import GLib, Gtk, Notify, AppIndicator3 as AppIndicator
+from mrak.log import logger
 
 
 def menu(mrak):
@@ -23,6 +24,11 @@ def menu(mrak):
         menu.append(item)
 
     menu.append(Gtk.SeparatorMenuItem())
+
+    stopcmd = Gtk.MenuItem(label="Stop")
+    stopcmd.connect("activate", lambda _: mrak.stop_rclone())
+    menu.append(stopcmd);
+
     quitcmd = Gtk.MenuItem(label="Quit Mrak")
     quitcmd.connect("activate", close)
     menu.append(quitcmd)
@@ -35,10 +41,14 @@ def submenu(mrak, remote):
     submenu = Gtk.Menu()
 
     item = Gtk.MenuItem(label="Update local directory")
-    item.connect("activate", lambda _: mrak.update_local(remote))
+    item.connect("activate", lambda _: mrak.update_local(remote, after_update))
     submenu.append(item)
 
     return submenu
+
+
+def after_update():
+    GLib.idle_add(logger.debug, "Rclone thread stopped.")
 
 
 def close(_):
